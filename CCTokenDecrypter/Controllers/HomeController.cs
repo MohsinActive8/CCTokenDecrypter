@@ -116,7 +116,9 @@ namespace CCTokenDecrypter.Controllers
                         worksheet.Cell(r, 5).Value = resp.CCExpirationMonth;
                         worksheet.Cell(r, 6).Value = resp.CCExpirationYear;
                         worksheet.Cell(r, 7).Value = resp.CCNumber;
-                        worksheet.Cell(r, 8).Value = resp.DecryptedCCNumber;
+
+                        worksheet.Cell(r, 8).SetValue<string>(resp.DecryptedCCNumber);
+
                         worksheet.Cell(r, 9).Value = resp.CCType;
                         worksheet.Cell(r, 10).Value = resp.State;
                         worksheet.Cell(r, 11).Value = resp.Country;
@@ -128,11 +130,6 @@ namespace CCTokenDecrypter.Controllers
                     MemoryStream ms = new MemoryStream();
                     workbook.SaveAs(ms);
                     ms.Seek(0, SeekOrigin.Begin);
-                    Response.Clear();
-                    Response.Headers.Clear();
-                    Response.Headers.Add("Content-Disposition", $"attachment; filename=result__{model.XlsFile.FileName}");
-                    Response.Headers.Add("Content-Length", ms.Length.ToString());
-                    Response.ContentType = "application/ms-excel";
                     return File(ms, "APPLICATION/ectet-stream", $"result__{model.XlsFile.FileName}");
                 }
                 #endregion
